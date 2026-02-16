@@ -8,7 +8,6 @@
 import UIKit
 
 final class GlassContainerDemoView: UIView {
-
     private var glassChildren: [UIVisualEffectView] = []
     private let statusLabel = UILabel()
 
@@ -37,9 +36,12 @@ final class GlassContainerDemoView: UIView {
             stack.bottomAnchor.constraint(equalTo: bottomAnchor),
         ])
 
-        let infoLabel = createInfoLabel(
-            "UIGlassContainerEffect groups multiple glass views together. This enables morphing animation between them and improves performance by sharing a single CABackdropLayer.\n\nTap Add/Remove to see the morphing animation."
-        )
+        let infoText = "UIGlassContainerEffect groups multiple glass "
+            + "views together. This enables morphing animation "
+            + "between them and improves performance by sharing "
+            + "a single CABackdropLayer.\n\nTap Add/Remove to see "
+            + "the morphing animation."
+        let infoLabel = createInfoLabel(infoText)
         stack.addArrangedSubview(infoLabel)
 
         if #available(iOS 26.0, *) {

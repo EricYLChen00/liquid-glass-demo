@@ -8,7 +8,6 @@
 import UIKit
 
 final class TabBarDemoView: UIView {
-
     private weak var parentVC: UIViewController?
     private let statusLabel = UILabel()
 
@@ -37,9 +36,12 @@ final class TabBarDemoView: UIView {
             stack.bottomAnchor.constraint(equalTo: bottomAnchor),
         ])
 
-        let infoLabel = createInfoLabel(
-            "The tab bar automatically adopts Liquid Glass when compiled with Xcode 26 SDK. Look at the bottom of the screen to see the glass tab bar.\n\nOn iOS 26, tab bars can minimize on scroll to give more room to content."
-        )
+        let infoText = "The tab bar automatically adopts Liquid Glass "
+            + "when compiled with Xcode 26 SDK. Look at the bottom "
+            + "of the screen to see the glass tab bar.\n\nOn iOS 26, "
+            + "tab bars can minimize on scroll to give more room "
+            + "to content."
+        let infoLabel = createInfoLabel(infoText)
         stack.addArrangedSubview(infoLabel)
 
         let minimizeButton = createActionButton(title: "Enable Minimize on Scroll", action: #selector(enableMinimize))

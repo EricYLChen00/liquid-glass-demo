@@ -6,10 +6,33 @@ disabled_rules:
   - nesting
   - identifier_name
   - generic_type_name
-  - line_length
-  - opening_brace
   - large_tuple
   - trailing_comma
+
+opt_in_rules:
+  - indentation_width
+  - trailing_whitespace
+  - vertical_whitespace_opening_braces
+  - vertical_whitespace_closing_braces
+  - comma_inheritance
+  - contains_over_filter_count
+  - empty_collection_literal
+  - empty_count
+  - force_unwrapping
+  - redundant_type_annotation
+  - return_value_from_void_function
+  - yoda_condition
+
+indentation_width:
+  indentation_width: 4
+  include_comments: false
+
+line_length:
+  warning: 150
+  error: 200
+
+opening_brace:
+  severity: warning
 
 excluded:
   - ".build"

@@ -8,7 +8,6 @@
 import UIKit
 
 final class ToolbarDemoView: UIView {
-
     private weak var parentVC: UIViewController?
     private let statusLabel = UILabel()
 
@@ -116,7 +115,7 @@ final class ToolbarDemoView: UIView {
 
     private func saveNavBarAppearance() {
         guard let navBar = parentVC?.navigationController?.navigationBar else { return }
-        savedStandardAppearance = navBar.standardAppearance.copy() as? UINavigationBarAppearance
+        savedStandardAppearance = navBar.standardAppearance.copy() as UINavigationBarAppearance
         savedScrollEdgeAppearance = navBar.scrollEdgeAppearance?.copy() as? UINavigationBarAppearance
         savedCompactAppearance = navBar.compactAppearance?.copy() as? UINavigationBarAppearance
         savedTintColor = navBar.tintColor

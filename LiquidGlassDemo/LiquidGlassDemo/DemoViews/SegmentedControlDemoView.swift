@@ -8,7 +8,6 @@
 import UIKit
 
 final class SegmentedControlDemoView: UIView {
-
     private let resultLabel = UILabel()
 
     override init(frame: CGRect) {

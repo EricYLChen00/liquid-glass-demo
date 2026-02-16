@@ -8,7 +8,6 @@
 import UIKit
 
 final class TintedInteractiveButtonsDemoView: UIView {
-
     private let resultLabel = UILabel()
 
     override init(frame: CGRect) {

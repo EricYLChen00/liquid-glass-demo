@@ -8,7 +8,6 @@
 import UIKit
 
 final class SearchBarDemoView: UIView, UISearchBarDelegate {
-
     private let resultLabel = UILabel()
 
     override init(frame: CGRect) {

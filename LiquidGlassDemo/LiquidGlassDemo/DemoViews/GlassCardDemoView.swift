@@ -8,7 +8,6 @@
 import UIKit
 
 final class GlassCardDemoView: UIView {
-
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupUI()

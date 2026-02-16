@@ -8,7 +8,6 @@
 import UIKit
 
 final class AnimatedGlassDemoView: UIView {
-
     private var effectView: UIVisualEffectView?
     private var isGlassVisible = false
     private let statusLabel = UILabel()

@@ -8,7 +8,6 @@
 import UIKit
 
 final class NavigationBarDemoView: UIView {
-
     private weak var parentVC: UIViewController?
 
     init(parentVC: UIViewController) {
@@ -36,9 +35,11 @@ final class NavigationBarDemoView: UIView {
             stack.bottomAnchor.constraint(equalTo: bottomAnchor),
         ])
 
-        let infoLabel = createInfoLabel(
-            "The navigation bar automatically adopts Liquid Glass when compiled with Xcode 26 SDK. No code changes needed.\n\nTap buttons below to configure different bar button item styles."
-        )
+        let infoText = "The navigation bar automatically adopts "
+            + "Liquid Glass when compiled with Xcode 26 SDK. "
+            + "No code changes needed.\n\nTap buttons below to "
+            + "configure different bar button item styles."
+        let infoLabel = createInfoLabel(infoText)
         stack.addArrangedSubview(infoLabel)
 
         let defaultButton = createActionButton(title: "Default Style", action: #selector(applyDefaultStyle))

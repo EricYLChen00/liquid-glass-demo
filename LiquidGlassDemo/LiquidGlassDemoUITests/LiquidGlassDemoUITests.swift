@@ -8,7 +8,6 @@
 import XCTest
 
 final class LiquidGlassDemoUITests: XCTestCase {
-
     private var app: XCUIApplication!
 
     override func setUpWithError() throws {

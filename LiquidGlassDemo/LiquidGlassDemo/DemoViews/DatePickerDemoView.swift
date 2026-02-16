@@ -8,7 +8,6 @@
 import UIKit
 
 final class DatePickerDemoView: UIView {
-
     private let resultLabel = UILabel()
     private var datePicker: UIDatePicker!
     private let dateFormatter: DateFormatter = {

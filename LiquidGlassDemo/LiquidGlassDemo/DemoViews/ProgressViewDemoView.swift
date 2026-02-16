@@ -8,7 +8,6 @@
 import UIKit
 
 final class ProgressViewDemoView: UIView {
-
     private let progressView = UIProgressView(progressViewStyle: .default)
     private let barProgressView = UIProgressView(progressViewStyle: .bar)
     private let statusLabel = UILabel()
