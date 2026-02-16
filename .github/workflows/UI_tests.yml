@@ -40,10 +40,9 @@ jobs:
             -project LiquidGlassDemo.xcodeproj \
             -scheme LiquidGlassDemo \
             -sdk iphonesimulator \
-            -destination 'platform=iOS Simulator,name=iPhone 16 Pro' \
+            -destination 'platform=iOS Simulator,name=iPhone 16 Pro,OS=latest' \
             -only-testing:LiquidGlassDemoUITests \
-            -resultBundlePath UITestResults.xcresult \
-            | xcpretty --color
+            -resultBundlePath UITestResults.xcresult
 
       - name: Upload Test Results
         if: failure()
