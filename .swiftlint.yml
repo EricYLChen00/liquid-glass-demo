@@ -1,0 +1,32 @@
+cyclomatic_complexity:
+  ignores_case_statements: true
+
+disabled_rules:
+  - todo
+  - nesting
+  - identifier_name
+  - generic_type_name
+  - line_length
+  - opening_brace
+  - large_tuple
+  - trailing_comma
+
+excluded:
+  - ".build"
+  - "**/.build"
+  - "**/DerivedData"
+
+type_name:
+  max_length: 60
+
+type_body_length:
+  warning: 500
+  error: 500
+
+function_body_length:
+  warning: 120
+  error: 150
+
+function_parameter_count:
+  warning: 6
+  error: 8
