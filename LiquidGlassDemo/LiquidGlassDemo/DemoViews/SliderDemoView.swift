@@ -8,7 +8,6 @@
 import UIKit
 
 final class SliderDemoView: UIView {
-
     private let valueLabel = UILabel()
 
     override init(frame: CGRect) {
@@ -36,9 +35,11 @@ final class SliderDemoView: UIView {
             stack.bottomAnchor.constraint(equalTo: bottomAnchor),
         ])
 
-        let infoLabel = createInfoLabel(
-            "UISlider on iOS 26 features enhanced interactions including momentum preservation and stretching. The thumb and track adopt glass styling."
-        )
+        let infoText = "UISlider on iOS 26 features enhanced "
+            + "interactions including momentum preservation "
+            + "and stretching. The thumb and track adopt "
+            + "glass styling."
+        let infoLabel = createInfoLabel(infoText)
         stack.addArrangedSubview(infoLabel)
 
         // Standard slider

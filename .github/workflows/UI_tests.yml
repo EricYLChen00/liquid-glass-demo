@@ -1,0 +1,52 @@
+name: UI Tests
+
+on:
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: ui-tests-${{ github.head_ref || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  ui-tests:
+    name: Run UI Tests
+    runs-on: self-hosted
+    defaults:
+      run:
+        working-directory: LiquidGlassDemo
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Select Latest Xcode
+        run: |
+          echo "Available Xcode versions:"
+          ls -d /Applications/Xcode*.app 2>/dev/null || true
+          XCODE_PATH=$(ls -d /Applications/Xcode*.app 2>/dev/null | sort -V | tail -1)
+          echo "Selected: $XCODE_PATH"
+          sudo xcode-select -s "$XCODE_PATH/Contents/Developer"
+          xcodebuild -version
+
+      - name: Boot Simulator
+        run: |
+          xcrun simctl boot "iPhone 16 Pro" 2>/dev/null || true
+          xcrun simctl bootstatus "iPhone 16 Pro" -b
+
+      - name: Build and Test
+        run: |
+          xcodebuild test \
+            -project LiquidGlassDemo.xcodeproj \
+            -scheme LiquidGlassDemo \
+            -sdk iphonesimulator \
+            -destination 'platform=iOS Simulator,name=iPhone 16 Pro,OS=latest' \
+            -only-testing:LiquidGlassDemoUITests \
+            -resultBundlePath UITestResults.xcresult
+
+      - name: Upload Test Results
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ui-test-results
+          path: LiquidGlassDemo/UITestResults.xcresult

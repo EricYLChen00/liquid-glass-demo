@@ -8,7 +8,6 @@
 import UIKit
 
 final class ComponentDetailViewController: UIViewController {
-
     // MARK: - Properties
 
     private let component: LiquidGlassComponent

@@ -8,7 +8,6 @@
 import UIKit
 
 final class AboutViewController: UIViewController {
-
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationItem.title = "About"
@@ -43,7 +42,11 @@ final class AboutViewController: UIViewController {
         versionLabel.textAlignment = .center
 
         let descriptionLabel = UILabel()
-        descriptionLabel.text = "A showcase of all Liquid Glass components available in iOS 26. This app demonstrates how standard UIKit components automatically adopt the new glass material, and how to create custom glass effects using UIGlassEffect and UIGlassContainerEffect."
+        descriptionLabel.text = "A showcase of all Liquid Glass components "
+            + "available in iOS 26. This app demonstrates how "
+            + "standard UIKit components automatically adopt the "
+            + "new glass material, and how to create custom glass "
+            + "effects using UIGlassEffect and UIGlassContainerEffect."
         descriptionLabel.font = .preferredFont(forTextStyle: .body)
         descriptionLabel.textColor = .secondaryLabel
         descriptionLabel.textAlignment = .center

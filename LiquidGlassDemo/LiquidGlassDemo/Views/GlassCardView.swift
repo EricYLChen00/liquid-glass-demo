@@ -9,7 +9,6 @@ import UIKit
 
 @available(iOS 26.0, *)
 class GlassCardView: UIView {
-
     private let effectView: UIVisualEffectView
     let contentContainerView = UIView()
 

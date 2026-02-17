@@ -8,7 +8,6 @@
 import UIKit
 
 final class AlertDemoView: UIView {
-
     private weak var parentVC: UIViewController?
     private let resultLabel = UILabel()
 

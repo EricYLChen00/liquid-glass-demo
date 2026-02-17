@@ -8,7 +8,6 @@
 import UIKit
 
 final class ProminentGlassButtonDemoView: UIView {
-
     private let resultLabel = UILabel()
     private var tapCount = 0
 

@@ -8,7 +8,6 @@
 import UIKit
 
 final class SFSymbolsDemoView: UIView {
-
     private let resultLabel = UILabel()
 
     override init(frame: CGRect) {
@@ -36,9 +35,11 @@ final class SFSymbolsDemoView: UIView {
             stack.bottomAnchor.constraint(equalTo: bottomAnchor),
         ])
 
-        let infoLabel = createInfoLabel(
-            "On iOS 26, toolbar icons should use plain SF Symbol variants (no circle/square fill backgrounds) since the glass effect provides the container."
-        )
+        let infoText = "On iOS 26, toolbar icons should use plain "
+            + "SF Symbol variants (no circle/square fill "
+            + "backgrounds) since the glass effect provides "
+            + "the container."
+        let infoLabel = createInfoLabel(infoText)
         stack.addArrangedSubview(infoLabel)
 
         if #available(iOS 26.0, *) {

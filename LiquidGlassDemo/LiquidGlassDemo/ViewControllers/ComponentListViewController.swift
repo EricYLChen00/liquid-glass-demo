@@ -8,7 +8,6 @@
 import UIKit
 
 final class ComponentListViewController: UITableViewController {
-
     // MARK: - Properties
 
     private let components = LiquidGlassComponent.allCases

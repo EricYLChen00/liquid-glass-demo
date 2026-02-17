@@ -8,7 +8,6 @@
 import UIKit
 
 final class SwitchDemoView: UIView {
-
     private let statusLabel = UILabel()
 
     override init(frame: CGRect) {

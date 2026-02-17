@@ -8,7 +8,6 @@
 import UIKit
 
 final class TintedInteractiveButtonsDemoView: UIView {
-
     private let resultLabel = UILabel()
 
     override init(frame: CGRect) {
@@ -241,11 +240,11 @@ final class TintedInteractiveButtonsDemoView: UIView {
         if let view = sender.view {
             UIView.animate(withDuration: 0.1, animations: {
                 view.transform = CGAffineTransform(scaleX: 0.9, y: 0.9)
-            }) { _ in
+            }, completion: { _ in
                 UIView.animate(withDuration: 0.1) {
                     view.transform = .identity
                 }
-            }
+            })
         }
     }
 

@@ -8,7 +8,6 @@
 import UIKit
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
-
     var window: UIWindow?
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
@@ -86,7 +85,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 // MARK: - Placeholder VC for non-Home tabs
 
 private final class PlaceholderViewController: UIViewController {
-
     private let tabName: String
 
     init(tabName: String) {

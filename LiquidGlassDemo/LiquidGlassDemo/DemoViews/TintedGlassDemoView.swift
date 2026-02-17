@@ -8,7 +8,6 @@
 import UIKit
 
 final class TintedGlassDemoView: UIView {
-
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupUI()
@@ -34,9 +33,10 @@ final class TintedGlassDemoView: UIView {
             stack.bottomAnchor.constraint(equalTo: bottomAnchor),
         ])
 
-        let infoLabel = createInfoLabel(
-            "Tinted glass adds a color overlay to convey semantic meaning. In UIKit, add a background color view inside the effect view's contentView."
-        )
+        let infoText = "Tinted glass adds a color overlay to convey "
+            + "semantic meaning. In UIKit, add a background color "
+            + "view inside the effect view's contentView."
+        let infoLabel = createInfoLabel(infoText)
         stack.addArrangedSubview(infoLabel)
 
         if #available(iOS 26.0, *) {

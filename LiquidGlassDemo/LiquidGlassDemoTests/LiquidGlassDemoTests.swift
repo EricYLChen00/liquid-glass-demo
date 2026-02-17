@@ -9,7 +9,6 @@ import XCTest
 @testable import LiquidGlassDemo
 
 final class LiquidGlassComponentTests: XCTestCase {
-
     func testAllCasesHas20Components() {
         XCTAssertEqual(LiquidGlassComponent.allCases.count, 20)
     }
