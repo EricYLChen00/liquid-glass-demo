@@ -67,6 +67,11 @@ final class ComponentDetailViewController: UIViewController {
     private func addDemoView() {
         let demoView = createDemoView(for: component)
         contentStack.addArrangedSubview(demoView)
+
+        let referenceView = CodeConnectReferenceView(
+            info: component.codeConnectInfo
+        )
+        contentStack.addArrangedSubview(referenceView)
     }
 
     // MARK: - Factory
