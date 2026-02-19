@@ -21,24 +21,11 @@ final class TintedInteractiveButtonsDemoView: UIView {
     }
 
     private func setupUI() {
-        let stack = UIStackView()
-        stack.axis = .vertical
-        stack.spacing = 24
-        stack.alignment = .center
-        stack.translatesAutoresizingMaskIntoConstraints = false
-        addSubview(stack)
+        let stack = addPinnedStack(spacing: 24, alignment: .center)
 
-        NSLayoutConstraint.activate([
-            stack.topAnchor.constraint(equalTo: topAnchor),
-            stack.leadingAnchor.constraint(equalTo: leadingAnchor),
-            stack.trailingAnchor.constraint(equalTo: trailingAnchor),
-            stack.bottomAnchor.constraint(equalTo: bottomAnchor),
-        ])
-
-        let infoLabel = createInfoLabel(
+        stack.addArrangedSubview(DemoUI.infoLabel(
             "Tinted glass buttons with different colors to convey semantic meaning. Each button has a color tint and interactive tap feedback."
-        )
-        stack.addArrangedSubview(infoLabel)
+        ))
 
         if #available(iOS 26.0, *) {
             let buttonData: [(String, String, UIColor)] = [
@@ -50,59 +37,37 @@ final class TintedInteractiveButtonsDemoView: UIView {
                 ("bolt.fill", "Quick Action", .systemPurple),
             ]
 
-            // Row 1: Circular buttons
             let circleRow = UIStackView()
             circleRow.axis = .horizontal
             circleRow.spacing = 16
             circleRow.alignment = .center
 
             for (iconName, name, color) in buttonData.prefix(3) {
-                let button = createTintedGlassButton(
-                    systemName: iconName,
-                    color: color,
-                    name: name,
-                    size: 56,
-                    cornerRadius: 28
+                circleRow.addArrangedSubview(
+                    createTintedGlassButton(systemName: iconName, color: color, name: name, size: 56, cornerRadius: 28)
                 )
-                circleRow.addArrangedSubview(button)
             }
             stack.addArrangedSubview(circleRow)
 
-            // Row 2: More circular buttons
             let circleRow2 = UIStackView()
             circleRow2.axis = .horizontal
             circleRow2.spacing = 16
             circleRow2.alignment = .center
 
             for (iconName, name, color) in buttonData.suffix(3) {
-                let button = createTintedGlassButton(
-                    systemName: iconName,
-                    color: color,
-                    name: name,
-                    size: 56,
-                    cornerRadius: 28
+                circleRow2.addArrangedSubview(
+                    createTintedGlassButton(systemName: iconName, color: color, name: name, size: 56, cornerRadius: 28)
                 )
-                circleRow2.addArrangedSubview(button)
             }
             stack.addArrangedSubview(circleRow2)
 
-            // Wide tinted buttons
-            let sectionLabel = UILabel()
-            sectionLabel.text = "Wide Tinted Buttons"
-            sectionLabel.font = .preferredFont(forTextStyle: .subheadline)
-            sectionLabel.textColor = .label
-            stack.addArrangedSubview(sectionLabel)
+            stack.addArrangedSubview(DemoUI.sectionLabel("Wide Tinted Buttons"))
 
             for (iconName, name, color) in buttonData.prefix(3) {
-                let wideButton = createWideTintedButton(
-                    systemName: iconName,
-                    title: name,
-                    color: color
-                )
-                stack.addArrangedSubview(wideButton)
+                stack.addArrangedSubview(createWideTintedButton(systemName: iconName, title: name, color: color))
             }
         } else {
-            stack.addArrangedSubview(createInfoLabel("Tinted glass requires iOS 26.0+"))
+            stack.addArrangedSubview(DemoUI.infoLabel("Tinted glass requires iOS 26.0+"))
         }
 
         resultLabel.text = "Tap any button"
@@ -123,20 +88,17 @@ final class TintedInteractiveButtonsDemoView: UIView {
         effectView.translatesAutoresizingMaskIntoConstraints = false
         container.addSubview(effectView)
 
-        // Tint
         let tintView = UIView()
         tintView.backgroundColor = color.withAlphaComponent(0.3)
         tintView.translatesAutoresizingMaskIntoConstraints = false
         effectView.contentView.insertSubview(tintView, at: 0)
 
-        // Icon
         let icon = UIImageView(image: UIImage(systemName: systemName))
         icon.tintColor = color
         icon.contentMode = .scaleAspectFit
         icon.translatesAutoresizingMaskIntoConstraints = false
         effectView.contentView.addSubview(icon)
 
-        // Tap gesture
         let tap = UITapGestureRecognizer(target: self, action: #selector(tintedButtonTapped(_:)))
         container.addGestureRecognizer(tap)
         container.accessibilityLabel = name
@@ -176,13 +138,11 @@ final class TintedInteractiveButtonsDemoView: UIView {
         effectView.translatesAutoresizingMaskIntoConstraints = false
         container.addSubview(effectView)
 
-        // Tint
         let tintView = UIView()
         tintView.backgroundColor = color.withAlphaComponent(0.2)
         tintView.translatesAutoresizingMaskIntoConstraints = false
         effectView.contentView.insertSubview(tintView, at: 0)
 
-        // Content
         let contentStack = UIStackView()
         contentStack.axis = .horizontal
         contentStack.spacing = 10
@@ -205,7 +165,6 @@ final class TintedInteractiveButtonsDemoView: UIView {
         contentStack.addArrangedSubview(label)
         effectView.contentView.addSubview(contentStack)
 
-        // Tap gesture
         let tap = UITapGestureRecognizer(target: self, action: #selector(tintedButtonTapped(_:)))
         container.addGestureRecognizer(tap)
         container.accessibilityLabel = title
@@ -236,7 +195,6 @@ final class TintedInteractiveButtonsDemoView: UIView {
         let name = sender.view?.accessibilityLabel ?? "Button"
         resultLabel.text = "\(name) tapped!"
 
-        // Simple tap animation
         if let view = sender.view {
             UIView.animate(withDuration: 0.1, animations: {
                 view.transform = CGAffineTransform(scaleX: 0.9, y: 0.9)
@@ -246,14 +204,5 @@ final class TintedInteractiveButtonsDemoView: UIView {
                 }
             })
         }
-    }
-
-    private func createInfoLabel(_ text: String) -> UILabel {
-        let label = UILabel()
-        label.text = text
-        label.font = .preferredFont(forTextStyle: .body)
-        label.textColor = .secondaryLabel
-        label.numberOfLines = 0
-        return label
     }
 }

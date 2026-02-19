@@ -23,31 +23,14 @@ final class AlertDemoView: UIView {
     }
 
     private func setupUI() {
-        let stack = UIStackView()
-        stack.axis = .vertical
-        stack.spacing = 16
-        stack.translatesAutoresizingMaskIntoConstraints = false
-        addSubview(stack)
+        let stack = addPinnedStack()
 
-        NSLayoutConstraint.activate([
-            stack.topAnchor.constraint(equalTo: topAnchor),
-            stack.leadingAnchor.constraint(equalTo: leadingAnchor),
-            stack.trailingAnchor.constraint(equalTo: trailingAnchor),
-            stack.bottomAnchor.constraint(equalTo: bottomAnchor),
-        ])
-
-        let infoLabel = createInfoLabel(
+        stack.addArrangedSubview(DemoUI.infoLabel(
             "Alerts and action sheets automatically adopt Liquid Glass styling on iOS 26. Tap the buttons below to see them."
-        )
-        stack.addArrangedSubview(infoLabel)
-
-        let alertButton = createActionButton(title: "Show Alert", action: #selector(showAlert))
-        let alertWithTextFieldButton = createActionButton(title: "Show Alert with Text Field", action: #selector(showAlertWithTextField))
-        let actionSheetButton = createActionButton(title: "Show Action Sheet", action: #selector(showActionSheet))
-
-        stack.addArrangedSubview(alertButton)
-        stack.addArrangedSubview(alertWithTextFieldButton)
-        stack.addArrangedSubview(actionSheetButton)
+        ))
+        stack.addArrangedSubview(DemoUI.actionButton(title: "Show Alert", target: self, action: #selector(showAlert)))
+        stack.addArrangedSubview(DemoUI.actionButton(title: "Show Alert with Text Field", target: self, action: #selector(showAlertWithTextField)))
+        stack.addArrangedSubview(DemoUI.actionButton(title: "Show Action Sheet", target: self, action: #selector(showActionSheet)))
 
         resultLabel.text = "Tap a button to show glass-styled alerts"
         resultLabel.font = .preferredFont(forTextStyle: .footnote)
@@ -108,23 +91,5 @@ final class AlertDemoView: UIView {
         })
         sheet.addAction(UIAlertAction(title: "Cancel", style: .cancel))
         parentVC?.present(sheet, animated: true)
-    }
-
-    private func createActionButton(title: String, action: Selector) -> UIButton {
-        var config = UIButton.Configuration.filled()
-        config.title = title
-        config.cornerStyle = .medium
-        let button = UIButton(configuration: config)
-        button.addTarget(self, action: action, for: .touchUpInside)
-        return button
-    }
-
-    private func createInfoLabel(_ text: String) -> UILabel {
-        let label = UILabel()
-        label.text = text
-        label.font = .preferredFont(forTextStyle: .body)
-        label.textColor = .secondaryLabel
-        label.numberOfLines = 0
-        return label
     }
 }

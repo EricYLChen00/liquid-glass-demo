@@ -19,25 +19,13 @@ final class TintedGlassDemoView: UIView {
     }
 
     private func setupUI() {
-        let stack = UIStackView()
-        stack.axis = .vertical
-        stack.spacing = 20
-        stack.alignment = .center
-        stack.translatesAutoresizingMaskIntoConstraints = false
-        addSubview(stack)
+        let stack = addPinnedStack(spacing: 20, alignment: .center)
 
-        NSLayoutConstraint.activate([
-            stack.topAnchor.constraint(equalTo: topAnchor),
-            stack.leadingAnchor.constraint(equalTo: leadingAnchor),
-            stack.trailingAnchor.constraint(equalTo: trailingAnchor),
-            stack.bottomAnchor.constraint(equalTo: bottomAnchor),
-        ])
-
-        let infoText = "Tinted glass adds a color overlay to convey "
+        stack.addArrangedSubview(DemoUI.infoLabel(
+            "Tinted glass adds a color overlay to convey "
             + "semantic meaning. In UIKit, add a background color "
             + "view inside the effect view's contentView."
-        let infoLabel = createInfoLabel(infoText)
-        stack.addArrangedSubview(infoLabel)
+        ))
 
         if #available(iOS 26.0, *) {
             let colors: [(UIColor, String)] = [
@@ -54,7 +42,6 @@ final class TintedGlassDemoView: UIView {
             gridStack.spacing = 12
             gridStack.alignment = .center
 
-            // Create rows of 3
             for rowStart in stride(from: 0, to: colors.count, by: 3) {
                 let rowStack = UIStackView()
                 rowStack.axis = .horizontal
@@ -84,7 +71,6 @@ final class TintedGlassDemoView: UIView {
 
             stack.addArrangedSubview(gridStack)
 
-            // Wide tinted glass bar
             let wideGlass = createTintedGlassView(tintColor: .systemIndigo, size: CGSize(width: 300, height: 60))
             let barLabel = UILabel()
             barLabel.text = "Tinted Glass Bar"
@@ -98,7 +84,7 @@ final class TintedGlassDemoView: UIView {
             ])
             stack.addArrangedSubview(wideGlass)
         } else {
-            stack.addArrangedSubview(createInfoLabel("Tinted glass requires iOS 26.0+"))
+            stack.addArrangedSubview(DemoUI.infoLabel("Tinted glass requires iOS 26.0+"))
         }
     }
 
@@ -124,14 +110,5 @@ final class TintedGlassDemoView: UIView {
         ])
 
         return effectView
-    }
-
-    private func createInfoLabel(_ text: String) -> UILabel {
-        let label = UILabel()
-        label.text = text
-        label.font = .preferredFont(forTextStyle: .body)
-        label.textColor = .secondaryLabel
-        label.numberOfLines = 0
-        return label
     }
 }

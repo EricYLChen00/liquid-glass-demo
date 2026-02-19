@@ -21,24 +21,11 @@ final class SwitchDemoView: UIView {
     }
 
     private func setupUI() {
-        let stack = UIStackView()
-        stack.axis = .vertical
-        stack.spacing = 24
-        stack.alignment = .fill
-        stack.translatesAutoresizingMaskIntoConstraints = false
-        addSubview(stack)
+        let stack = addPinnedStack(spacing: 24)
 
-        NSLayoutConstraint.activate([
-            stack.topAnchor.constraint(equalTo: topAnchor),
-            stack.leadingAnchor.constraint(equalTo: leadingAnchor),
-            stack.trailingAnchor.constraint(equalTo: trailingAnchor),
-            stack.bottomAnchor.constraint(equalTo: bottomAnchor),
-        ])
-
-        let infoLabel = createInfoLabel(
+        stack.addArrangedSubview(DemoUI.infoLabel(
             "UISwitch on iOS 26 features an updated glass appearance. Toggle the switches to see the animation."
-        )
-        stack.addArrangedSubview(infoLabel)
+        ))
 
         let switches: [(String, UIColor?, Bool)] = [
             ("Wi-Fi", nil, true),
@@ -88,14 +75,5 @@ final class SwitchDemoView: UIView {
         let state = sender.isOn ? "ON" : "OFF"
         let name = sender.accessibilityLabel ?? "Switch"
         statusLabel.text = "\(name): \(state)"
-    }
-
-    private func createInfoLabel(_ text: String) -> UILabel {
-        let label = UILabel()
-        label.text = text
-        label.font = .preferredFont(forTextStyle: .body)
-        label.textColor = .secondaryLabel
-        label.numberOfLines = 0
-        return label
     }
 }

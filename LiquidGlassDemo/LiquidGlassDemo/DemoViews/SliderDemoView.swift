@@ -21,31 +21,16 @@ final class SliderDemoView: UIView {
     }
 
     private func setupUI() {
-        let stack = UIStackView()
-        stack.axis = .vertical
-        stack.spacing = 24
-        stack.alignment = .fill
-        stack.translatesAutoresizingMaskIntoConstraints = false
-        addSubview(stack)
+        let stack = addPinnedStack(spacing: 24)
 
-        NSLayoutConstraint.activate([
-            stack.topAnchor.constraint(equalTo: topAnchor),
-            stack.leadingAnchor.constraint(equalTo: leadingAnchor),
-            stack.trailingAnchor.constraint(equalTo: trailingAnchor),
-            stack.bottomAnchor.constraint(equalTo: bottomAnchor),
-        ])
-
-        let infoText = "UISlider on iOS 26 features enhanced "
+        stack.addArrangedSubview(DemoUI.infoLabel(
+            "UISlider on iOS 26 features enhanced "
             + "interactions including momentum preservation "
             + "and stretching. The thumb and track adopt "
             + "glass styling."
-        let infoLabel = createInfoLabel(infoText)
-        stack.addArrangedSubview(infoLabel)
+        ))
 
-        // Standard slider
-        let sectionLabel1 = createSectionLabel("Standard Slider")
-        stack.addArrangedSubview(sectionLabel1)
-
+        stack.addArrangedSubview(DemoUI.sectionLabel("Standard Slider"))
         let standardSlider = UISlider()
         standardSlider.minimumValue = 0
         standardSlider.maximumValue = 100
@@ -53,10 +38,7 @@ final class SliderDemoView: UIView {
         standardSlider.addTarget(self, action: #selector(sliderChanged(_:)), for: .valueChanged)
         stack.addArrangedSubview(standardSlider)
 
-        // Slider with min/max images
-        let sectionLabel2 = createSectionLabel("Slider with Icons")
-        stack.addArrangedSubview(sectionLabel2)
-
+        stack.addArrangedSubview(DemoUI.sectionLabel("Slider with Icons"))
         let iconSlider = UISlider()
         iconSlider.minimumValue = 0
         iconSlider.maximumValue = 100
@@ -66,10 +48,7 @@ final class SliderDemoView: UIView {
         iconSlider.addTarget(self, action: #selector(sliderChanged(_:)), for: .valueChanged)
         stack.addArrangedSubview(iconSlider)
 
-        // Tinted slider
-        let sectionLabel3 = createSectionLabel("Tinted Slider")
-        stack.addArrangedSubview(sectionLabel3)
-
+        stack.addArrangedSubview(DemoUI.sectionLabel("Tinted Slider"))
         let tintedSlider = UISlider()
         tintedSlider.minimumValue = 0
         tintedSlider.maximumValue = 100
@@ -78,10 +57,7 @@ final class SliderDemoView: UIView {
         tintedSlider.addTarget(self, action: #selector(sliderChanged(_:)), for: .valueChanged)
         stack.addArrangedSubview(tintedSlider)
 
-        // Brightness-style slider
-        let sectionLabel4 = createSectionLabel("Brightness Slider")
-        stack.addArrangedSubview(sectionLabel4)
-
+        stack.addArrangedSubview(DemoUI.sectionLabel("Brightness Slider"))
         let brightnessSlider = UISlider()
         brightnessSlider.minimumValue = 0
         brightnessSlider.maximumValue = 100
@@ -101,22 +77,5 @@ final class SliderDemoView: UIView {
 
     @objc private func sliderChanged(_ sender: UISlider) {
         valueLabel.text = String(format: "Value: %.1f", sender.value)
-    }
-
-    private func createSectionLabel(_ text: String) -> UILabel {
-        let label = UILabel()
-        label.text = text
-        label.font = .preferredFont(forTextStyle: .subheadline)
-        label.textColor = .label
-        return label
-    }
-
-    private func createInfoLabel(_ text: String) -> UILabel {
-        let label = UILabel()
-        label.text = text
-        label.font = .preferredFont(forTextStyle: .body)
-        label.textColor = .secondaryLabel
-        label.numberOfLines = 0
-        return label
     }
 }

@@ -22,34 +22,20 @@ final class ProminentGlassButtonDemoView: UIView {
     }
 
     private func setupUI() {
-        let stack = UIStackView()
-        stack.axis = .vertical
-        stack.spacing = 20
-        stack.alignment = .center
-        stack.translatesAutoresizingMaskIntoConstraints = false
-        addSubview(stack)
+        let stack = addPinnedStack(spacing: 20, alignment: .center)
 
-        NSLayoutConstraint.activate([
-            stack.topAnchor.constraint(equalTo: topAnchor),
-            stack.leadingAnchor.constraint(equalTo: leadingAnchor),
-            stack.trailingAnchor.constraint(equalTo: trailingAnchor),
-            stack.bottomAnchor.constraint(equalTo: bottomAnchor),
-        ])
-
-        let infoLabel = createInfoLabel(
+        let infoLabel = DemoUI.infoLabel(
             "UIButton with .prominentGlass() provides a more visually prominent glass style, ideal for primary actions."
         )
         infoLabel.textAlignment = .natural
         stack.addArrangedSubview(infoLabel)
 
         if #available(iOS 26.0, *) {
-            // Standard prominent glass
             let prominentButton = UIButton(configuration: .prominentGlass())
             prominentButton.setTitle("Prominent Glass", for: .normal)
             prominentButton.addTarget(self, action: #selector(buttonTapped), for: .touchUpInside)
             stack.addArrangedSubview(prominentButton)
 
-            // Prominent glass with icon
             var iconConfig = UIButton.Configuration.prominentGlass()
             iconConfig.image = UIImage(systemName: "plus")
             iconConfig.title = "Add Item"
@@ -58,7 +44,6 @@ final class ProminentGlassButtonDemoView: UIView {
             iconButton.addTarget(self, action: #selector(buttonTapped), for: .touchUpInside)
             stack.addArrangedSubview(iconButton)
 
-            // Tinted prominent glass
             var tintedConfig = UIButton.Configuration.prominentGlass()
             tintedConfig.title = "Tinted Prominent"
             tintedConfig.baseForegroundColor = .systemRed
@@ -66,7 +51,6 @@ final class ProminentGlassButtonDemoView: UIView {
             tintedButton.addTarget(self, action: #selector(buttonTapped), for: .touchUpInside)
             stack.addArrangedSubview(tintedButton)
 
-            // Large prominent glass
             var largeConfig = UIButton.Configuration.prominentGlass()
             largeConfig.title = "Confirm Action"
             largeConfig.buttonSize = .large
@@ -76,7 +60,7 @@ final class ProminentGlassButtonDemoView: UIView {
             largeButton.addTarget(self, action: #selector(buttonTapped), for: .touchUpInside)
             stack.addArrangedSubview(largeButton)
         } else {
-            stack.addArrangedSubview(createInfoLabel("Prominent glass buttons require iOS 26.0+"))
+            stack.addArrangedSubview(DemoUI.infoLabel("Prominent glass buttons require iOS 26.0+"))
         }
 
         resultLabel.text = "Tap any button"
@@ -89,14 +73,5 @@ final class ProminentGlassButtonDemoView: UIView {
     @objc private func buttonTapped() {
         tapCount += 1
         resultLabel.text = "Button tapped \(tapCount) time\(tapCount == 1 ? "" : "s")"
-    }
-
-    private func createInfoLabel(_ text: String) -> UILabel {
-        let label = UILabel()
-        label.text = text
-        label.font = .preferredFont(forTextStyle: .body)
-        label.textColor = .secondaryLabel
-        label.numberOfLines = 0
-        return label
     }
 }

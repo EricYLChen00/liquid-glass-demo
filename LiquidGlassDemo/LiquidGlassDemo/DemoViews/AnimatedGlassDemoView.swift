@@ -23,27 +23,13 @@ final class AnimatedGlassDemoView: UIView {
     }
 
     private func setupUI() {
-        let stack = UIStackView()
-        stack.axis = .vertical
-        stack.spacing = 24
-        stack.alignment = .center
-        stack.translatesAutoresizingMaskIntoConstraints = false
-        addSubview(stack)
+        let stack = addPinnedStack(spacing: 24, alignment: .center)
 
-        NSLayoutConstraint.activate([
-            stack.topAnchor.constraint(equalTo: topAnchor),
-            stack.leadingAnchor.constraint(equalTo: leadingAnchor),
-            stack.trailingAnchor.constraint(equalTo: trailingAnchor),
-            stack.bottomAnchor.constraint(equalTo: bottomAnchor),
-        ])
-
-        let infoLabel = createInfoLabel(
+        stack.addArrangedSubview(DemoUI.infoLabel(
             "Animate glass materialization and dematerialization by toggling the UIVisualEffectView's effect property inside UIView.animate."
-        )
-        stack.addArrangedSubview(infoLabel)
+        ))
 
         if #available(iOS 26.0, *) {
-            // Glass view container
             let glassContainer = UIView()
             glassContainer.translatesAutoresizingMaskIntoConstraints = false
             glassContainer.heightAnchor.constraint(equalToConstant: 150).isActive = true
@@ -84,26 +70,18 @@ final class AnimatedGlassDemoView: UIView {
             self.effectView = ev
             stack.addArrangedSubview(glassContainer)
 
-            // Buttons
             let buttonStack = UIStackView()
             buttonStack.axis = .horizontal
             buttonStack.spacing = 12
             buttonStack.distribution = .fillEqually
-
-            let materializeButton = createActionButton(title: "Materialize", action: #selector(materialize))
-            let dematerializeButton = createActionButton(title: "Dematerialize", action: #selector(dematerialize))
-            let toggleButton = createActionButton(title: "Toggle", action: #selector(toggleGlass))
-
-            buttonStack.addArrangedSubview(materializeButton)
-            buttonStack.addArrangedSubview(dematerializeButton)
-            buttonStack.addArrangedSubview(toggleButton)
+            buttonStack.addArrangedSubview(DemoUI.actionButton(title: "Materialize", target: self, action: #selector(materialize), size: .small))
+            buttonStack.addArrangedSubview(DemoUI.actionButton(title: "Dematerialize", target: self, action: #selector(dematerialize), size: .small))
+            buttonStack.addArrangedSubview(DemoUI.actionButton(title: "Toggle", target: self, action: #selector(toggleGlass), size: .small))
             stack.addArrangedSubview(buttonStack)
 
-            // Spring animation button
-            let springButton = createActionButton(title: "Spring Animation", action: #selector(springAnimate))
-            stack.addArrangedSubview(springButton)
+            stack.addArrangedSubview(DemoUI.actionButton(title: "Spring Animation", target: self, action: #selector(springAnimate), size: .small))
         } else {
-            stack.addArrangedSubview(createInfoLabel("Animated glass requires iOS 26.0+"))
+            stack.addArrangedSubview(DemoUI.infoLabel("Animated glass requires iOS 26.0+"))
         }
 
         statusLabel.text = "Glass: hidden"
@@ -154,24 +132,5 @@ final class AnimatedGlassDemoView: UIView {
             isGlassVisible = true
             statusLabel.text = "Glass: visible (spring)"
         }
-    }
-
-    private func createActionButton(title: String, action: Selector) -> UIButton {
-        var config = UIButton.Configuration.filled()
-        config.title = title
-        config.cornerStyle = .medium
-        config.buttonSize = .small
-        let button = UIButton(configuration: config)
-        button.addTarget(self, action: action, for: .touchUpInside)
-        return button
-    }
-
-    private func createInfoLabel(_ text: String) -> UILabel {
-        let label = UILabel()
-        label.text = text
-        label.font = .preferredFont(forTextStyle: .body)
-        label.textColor = .secondaryLabel
-        label.numberOfLines = 0
-        return label
     }
 }

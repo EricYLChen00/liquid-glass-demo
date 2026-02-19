@@ -23,61 +23,39 @@ final class ProgressViewDemoView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 
+    override func willMove(toWindow newWindow: UIWindow?) {
+        super.willMove(toWindow: newWindow)
+        if newWindow == nil { timer?.invalidate() }
+    }
+
     private func setupUI() {
-        let stack = UIStackView()
-        stack.axis = .vertical
-        stack.spacing = 24
-        stack.alignment = .fill
-        stack.translatesAutoresizingMaskIntoConstraints = false
-        addSubview(stack)
+        let stack = addPinnedStack(spacing: 24)
 
-        NSLayoutConstraint.activate([
-            stack.topAnchor.constraint(equalTo: topAnchor),
-            stack.leadingAnchor.constraint(equalTo: leadingAnchor),
-            stack.trailingAnchor.constraint(equalTo: trailingAnchor),
-            stack.bottomAnchor.constraint(equalTo: bottomAnchor),
-        ])
-
-        let infoLabel = createInfoLabel(
+        stack.addArrangedSubview(DemoUI.infoLabel(
             "UIProgressView on iOS 26 with updated styling. Tap Start to see animated progress."
-        )
-        stack.addArrangedSubview(infoLabel)
+        ))
 
-        // Default style
-        let sectionLabel1 = createSectionLabel("Default Style")
-        stack.addArrangedSubview(sectionLabel1)
-
+        stack.addArrangedSubview(DemoUI.sectionLabel("Default Style"))
         progressView.progress = 0
         stack.addArrangedSubview(progressView)
 
-        // Bar style
-        let sectionLabel2 = createSectionLabel("Bar Style")
-        stack.addArrangedSubview(sectionLabel2)
-
+        stack.addArrangedSubview(DemoUI.sectionLabel("Bar Style"))
         barProgressView.progress = 0
         stack.addArrangedSubview(barProgressView)
 
-        // Tinted progress
-        let sectionLabel3 = createSectionLabel("Tinted Progress")
-        stack.addArrangedSubview(sectionLabel3)
-
+        stack.addArrangedSubview(DemoUI.sectionLabel("Tinted Progress"))
         let tintedProgress = UIProgressView(progressViewStyle: .default)
         tintedProgress.progressTintColor = .systemGreen
         tintedProgress.trackTintColor = .systemGreen.withAlphaComponent(0.2)
         tintedProgress.progress = 0.65
         stack.addArrangedSubview(tintedProgress)
 
-        // Buttons
         let buttonStack = UIStackView()
         buttonStack.axis = .horizontal
         buttonStack.spacing = 12
         buttonStack.distribution = .fillEqually
-
-        let startButton = createActionButton(title: "Start", action: #selector(startProgress))
-        let resetButton = createActionButton(title: "Reset", action: #selector(resetProgress))
-
-        buttonStack.addArrangedSubview(startButton)
-        buttonStack.addArrangedSubview(resetButton)
+        buttonStack.addArrangedSubview(DemoUI.actionButton(title: "Start", target: self, action: #selector(startProgress)))
+        buttonStack.addArrangedSubview(DemoUI.actionButton(title: "Reset", target: self, action: #selector(resetProgress)))
         stack.addArrangedSubview(buttonStack)
 
         statusLabel.text = "Progress: 0%"
@@ -116,31 +94,5 @@ final class ProgressViewDemoView: UIView {
         progressView.setProgress(0, animated: true)
         barProgressView.setProgress(0, animated: true)
         statusLabel.text = "Progress: 0%"
-    }
-
-    private func createSectionLabel(_ text: String) -> UILabel {
-        let label = UILabel()
-        label.text = text
-        label.font = .preferredFont(forTextStyle: .subheadline)
-        label.textColor = .label
-        return label
-    }
-
-    private func createActionButton(title: String, action: Selector) -> UIButton {
-        var config = UIButton.Configuration.filled()
-        config.title = title
-        config.cornerStyle = .medium
-        let button = UIButton(configuration: config)
-        button.addTarget(self, action: action, for: .touchUpInside)
-        return button
-    }
-
-    private func createInfoLabel(_ text: String) -> UILabel {
-        let label = UILabel()
-        label.text = text
-        label.font = .preferredFont(forTextStyle: .body)
-        label.textColor = .secondaryLabel
-        label.numberOfLines = 0
-        return label
     }
 }

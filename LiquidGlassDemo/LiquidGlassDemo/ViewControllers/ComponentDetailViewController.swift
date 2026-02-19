@@ -38,6 +38,16 @@ final class ComponentDetailViewController: UIViewController {
         addDemoView()
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        let appearance = UINavigationBarAppearance()
+        appearance.configureWithDefaultBackground()
+        navigationController?.navigationBar.standardAppearance = appearance
+        navigationController?.navigationBar.scrollEdgeAppearance = appearance
+        navigationController?.navigationBar.compactAppearance = appearance
+        navigationController?.navigationBar.tintColor = nil
+    }
+
     // MARK: - Setup
 
     private func setupScrollView() {
@@ -65,59 +75,11 @@ final class ComponentDetailViewController: UIViewController {
     }
 
     private func addDemoView() {
-        let demoView = createDemoView(for: component)
-        contentStack.addArrangedSubview(demoView)
+        contentStack.addArrangedSubview(component.makeDemoView(parentVC: self))
 
         let referenceView = CodeConnectReferenceView(
             info: component.codeConnectInfo
         )
         contentStack.addArrangedSubview(referenceView)
-    }
-
-    // MARK: - Factory
-
-    private func createDemoView(for component: LiquidGlassComponent) -> UIView {
-        switch component {
-        case .navigationBar:
-            return NavigationBarDemoView(parentVC: self)
-        case .tabBar:
-            return TabBarDemoView()
-        case .toolbar:
-            return ToolbarDemoView(parentVC: self)
-        case .searchBar:
-            return SearchBarDemoView()
-        case .alertAndActionSheet:
-            return AlertDemoView(parentVC: self)
-        case .glassButton:
-            return GlassButtonDemoView()
-        case .prominentGlassButton:
-            return ProminentGlassButtonDemoView()
-        case .glassEffectBasic:
-            return GlassEffectDemoView()
-        case .glassEffectTinted:
-            return TintedGlassDemoView()
-        case .glassContainerMorphing:
-            return GlassContainerDemoView()
-        case .cornerConfiguration:
-            return CornerConfigDemoView()
-        case .segmentedControl:
-            return SegmentedControlDemoView()
-        case .slider:
-            return SliderDemoView()
-        case .switchControl:
-            return SwitchDemoView()
-        case .datePicker:
-            return DatePickerDemoView()
-        case .progressView:
-            return ProgressViewDemoView()
-        case .glassCardView:
-            return GlassCardDemoView()
-        case .animatedGlass:
-            return AnimatedGlassDemoView()
-        case .sfSymbolsOnGlass:
-            return SFSymbolsDemoView()
-        case .tintedInteractiveButtons:
-            return TintedInteractiveButtonsDemoView()
-        }
     }
 }

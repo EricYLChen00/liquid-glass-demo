@@ -11,25 +11,16 @@ final class ToolbarDemoView: UIView {
     private weak var parentVC: UIViewController?
     private let statusLabel = UILabel()
 
-    // Save original nav bar appearance to restore on exit
-    private var savedStandardAppearance: UINavigationBarAppearance?
-    private var savedScrollEdgeAppearance: UINavigationBarAppearance?
-    private var savedCompactAppearance: UINavigationBarAppearance?
-    private var savedTintColor: UIColor?
-
     init(parentVC: UIViewController) {
         self.parentVC = parentVC
         super.init(frame: .zero)
         setupUI()
-        saveNavBarAppearance()
-        applyGlassNavBar()
         showGroupedNavBarItems()
     }
 
     override func willMove(toWindow newWindow: UIWindow?) {
         super.willMove(toWindow: newWindow)
         if newWindow == nil {
-            restoreNavBarAppearance()
             parentVC?.navigationItem.rightBarButtonItems = nil
             parentVC?.navigationController?.setToolbarHidden(true, animated: false)
         }
@@ -41,69 +32,49 @@ final class ToolbarDemoView: UIView {
     }
 
     private func setupUI() {
-        let stack = UIStackView()
-        stack.axis = .vertical
-        stack.spacing = 16
-        stack.translatesAutoresizingMaskIntoConstraints = false
-        addSubview(stack)
+        let stack = addPinnedStack()
 
-        NSLayoutConstraint.activate([
-            stack.topAnchor.constraint(equalTo: topAnchor),
-            stack.leadingAnchor.constraint(equalTo: leadingAnchor),
-            stack.trailingAnchor.constraint(equalTo: trailingAnchor),
-            stack.bottomAnchor.constraint(equalTo: bottomAnchor),
-        ])
-
-        let infoLabel = createInfoLabel(
+        stack.addArrangedSubview(DemoUI.infoLabel(
             "In iOS 26, navigation bar items automatically get Liquid Glass styling.\n\n"
             + "Adjacent items share one glass pill. Use fixedSpace(0) to split them into separate glass circles."
-        )
-        stack.addArrangedSubview(infoLabel)
+        ))
 
-        // Section: Navigation Bar Items (HIG style)
         let sectionLabel = UILabel()
         sectionLabel.text = "Navigation Bar Items"
         sectionLabel.font = .preferredFont(forTextStyle: .headline)
         stack.addArrangedSubview(sectionLabel)
 
-        let groupedButton = createActionButton(
+        stack.addArrangedSubview(DemoUI.actionButton(
             title: "Grouped: Share + More (pill)",
-            action: #selector(showGroupedNavBarItems)
-        )
-        let separatedButton = createActionButton(
+            target: self, action: #selector(showGroupedNavBarItems)
+        ))
+        stack.addArrangedSubview(DemoUI.actionButton(
             title: "Separated: fixedSpace(0)",
-            action: #selector(showSeparatedNavBarItems)
-        )
-        let mixedButton = createActionButton(
+            target: self, action: #selector(showSeparatedNavBarItems)
+        ))
+        stack.addArrangedSubview(DemoUI.actionButton(
             title: "Mixed: Compose | Share+More",
-            action: #selector(showMixedNavBarItems)
-        )
+            target: self, action: #selector(showMixedNavBarItems)
+        ))
 
-        stack.addArrangedSubview(groupedButton)
-        stack.addArrangedSubview(separatedButton)
-        stack.addArrangedSubview(mixedButton)
-
-        // Section: Bottom Toolbar
         let bottomSection = UILabel()
         bottomSection.text = "Bottom Toolbar"
         bottomSection.font = .preferredFont(forTextStyle: .headline)
         stack.addArrangedSubview(bottomSection)
 
-        let showBottomButton = createActionButton(
+        stack.addArrangedSubview(DemoUI.actionButton(
             title: "Show Bottom Toolbar",
-            action: #selector(showBottomToolbar)
-        )
-        let hideBottomButton = createActionButton(
+            target: self, action: #selector(showBottomToolbar)
+        ))
+        stack.addArrangedSubview(DemoUI.actionButton(
             title: "Hide Bottom Toolbar",
-            action: #selector(hideBottomToolbar)
-        )
+            target: self, action: #selector(hideBottomToolbar)
+        ))
 
-        stack.addArrangedSubview(showBottomButton)
-        stack.addArrangedSubview(hideBottomButton)
-
-        // Reset
-        let resetButton = createActionButton(title: "Reset All", action: #selector(resetAll))
-        stack.addArrangedSubview(resetButton)
+        stack.addArrangedSubview(DemoUI.actionButton(
+            title: "Reset All",
+            target: self, action: #selector(resetAll)
+        ))
 
         statusLabel.text = "Grouped nav bar items (share + more in one pill)"
         statusLabel.font = .preferredFont(forTextStyle: .footnote)
@@ -113,39 +84,9 @@ final class ToolbarDemoView: UIView {
         stack.addArrangedSubview(statusLabel)
     }
 
-    private func saveNavBarAppearance() {
-        guard let navBar = parentVC?.navigationController?.navigationBar else { return }
-        savedStandardAppearance = navBar.standardAppearance.copy() as UINavigationBarAppearance
-        savedScrollEdgeAppearance = navBar.scrollEdgeAppearance?.copy() as? UINavigationBarAppearance
-        savedCompactAppearance = navBar.compactAppearance?.copy() as? UINavigationBarAppearance
-        savedTintColor = navBar.tintColor
-    }
-
-    private func restoreNavBarAppearance() {
-        guard let navBar = parentVC?.navigationController?.navigationBar else { return }
-        if let saved = savedStandardAppearance {
-            navBar.standardAppearance = saved
-        }
-        navBar.scrollEdgeAppearance = savedScrollEdgeAppearance
-        navBar.compactAppearance = savedCompactAppearance
-        navBar.tintColor = savedTintColor
-    }
-
-    /// Temporarily switch nav bar to glass (remove custom red background)
-    private func applyGlassNavBar() {
-        guard let navBar = parentVC?.navigationController?.navigationBar else { return }
-        let glassAppearance = UINavigationBarAppearance()
-        glassAppearance.configureWithDefaultBackground()
-        navBar.standardAppearance = glassAppearance
-        navBar.scrollEdgeAppearance = glassAppearance
-        navBar.compactAppearance = glassAppearance
-        navBar.tintColor = nil
-    }
-
-    // MARK: - Nav Bar Items: Grouped (shared glass pill)
+    // MARK: - Nav Bar Items
 
     @objc private func showGroupedNavBarItems() {
-        // Adjacent items → share one glass pill
         let shareItem = UIBarButtonItem(
             image: UIImage(systemName: "square.and.arrow.up"),
             style: .plain, target: nil, action: nil
@@ -154,12 +95,9 @@ final class ToolbarDemoView: UIView {
             image: UIImage(systemName: "ellipsis"),
             style: .plain, target: nil, action: nil
         )
-        // No separator: share + more grouped into one pill
         parentVC?.navigationItem.rightBarButtonItems = [moreItem, shareItem]
         statusLabel.text = "Grouped: share + more share one glass pill"
     }
-
-    // MARK: - Nav Bar Items: Separated (fixedSpace splits into individual circles)
 
     @objc private func showSeparatedNavBarItems() {
         let composeItem = UIBarButtonItem(
@@ -176,15 +114,11 @@ final class ToolbarDemoView: UIView {
             image: UIImage(systemName: "ellipsis"),
             style: .plain, target: nil, action: nil
         )
-        // fixedSpace(0) between each → all separate glass circles
         parentVC?.navigationItem.rightBarButtonItems = [moreItem, separator2, shareItem, separator, composeItem]
         statusLabel.text = "Separated: each item is its own glass circle (fixedSpace(0))"
     }
 
-    // MARK: - Nav Bar Items: Mixed (HIG style)
-
     @objc private func showMixedNavBarItems() {
-        // Compose gets its own circle, Share + More grouped in a pill
         let composeItem = UIBarButtonItem(
             image: UIImage(systemName: "square.and.pencil"),
             style: .plain, target: nil, action: nil
@@ -198,8 +132,6 @@ final class ToolbarDemoView: UIView {
             image: UIImage(systemName: "ellipsis"),
             style: .plain, target: nil, action: nil
         )
-        // rightBarButtonItems order: right-to-left
-        // more, share (grouped pill) | fixedSpace(0) | compose (solo circle)
         parentVC?.navigationItem.rightBarButtonItems = [moreItem, shareItem, separator, composeItem]
         statusLabel.text = "Mixed: compose (circle) | share+more (pill) — matches HIG"
     }
@@ -230,31 +162,9 @@ final class ToolbarDemoView: UIView {
         statusLabel.text = "Bottom toolbar hidden"
     }
 
-    // MARK: - Reset
-
     @objc private func resetAll() {
         parentVC?.navigationItem.rightBarButtonItems = nil
         parentVC?.navigationController?.setToolbarHidden(true, animated: true)
         statusLabel.text = "Reset: all items cleared"
-    }
-
-    // MARK: - Helpers
-
-    private func createActionButton(title: String, action: Selector) -> UIButton {
-        var config = UIButton.Configuration.filled()
-        config.title = title
-        config.cornerStyle = .medium
-        let button = UIButton(configuration: config)
-        button.addTarget(self, action: action, for: .touchUpInside)
-        return button
-    }
-
-    private func createInfoLabel(_ text: String) -> UILabel {
-        let label = UILabel()
-        label.text = text
-        label.font = .preferredFont(forTextStyle: .body)
-        label.textColor = .secondaryLabel
-        label.numberOfLines = 0
-        return label
     }
 }

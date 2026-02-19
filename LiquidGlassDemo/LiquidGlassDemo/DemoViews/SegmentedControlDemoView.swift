@@ -21,32 +21,17 @@ final class SegmentedControlDemoView: UIView {
     }
 
     private func setupUI() {
-        let stack = UIStackView()
-        stack.axis = .vertical
-        stack.spacing = 24
-        stack.alignment = .fill
-        stack.translatesAutoresizingMaskIntoConstraints = false
-        addSubview(stack)
+        let stack = addPinnedStack(spacing: 24)
 
-        NSLayoutConstraint.activate([
-            stack.topAnchor.constraint(equalTo: topAnchor),
-            stack.leadingAnchor.constraint(equalTo: leadingAnchor),
-            stack.trailingAnchor.constraint(equalTo: trailingAnchor),
-            stack.bottomAnchor.constraint(equalTo: bottomAnchor),
-        ])
-
-        let infoLabel = createInfoLabel(
+        stack.addArrangedSubview(DemoUI.infoLabel(
             "UISegmentedControl automatically adopts glass styling on iOS 26. The selected segment indicator uses a glass material."
-        )
-        stack.addArrangedSubview(infoLabel)
+        ))
 
-        // Standard segmented control
         let standardSegment = UISegmentedControl(items: ["First", "Second", "Third"])
         standardSegment.selectedSegmentIndex = 0
         standardSegment.addTarget(self, action: #selector(segmentChanged(_:)), for: .valueChanged)
         stack.addArrangedSubview(standardSegment)
 
-        // Image segmented control
         let imageSegment = UISegmentedControl(items: [
             UIImage(systemName: "list.bullet") as Any,
             UIImage(systemName: "square.grid.2x2") as Any,
@@ -56,7 +41,6 @@ final class SegmentedControlDemoView: UIView {
         imageSegment.addTarget(self, action: #selector(segmentChanged(_:)), for: .valueChanged)
         stack.addArrangedSubview(imageSegment)
 
-        // Mixed segmented control
         let mixedSegment = UISegmentedControl(items: ["Day", "Week", "Month", "Year"])
         mixedSegment.selectedSegmentIndex = 1
         mixedSegment.addTarget(self, action: #selector(segmentChanged(_:)), for: .valueChanged)
@@ -72,14 +56,5 @@ final class SegmentedControlDemoView: UIView {
     @objc private func segmentChanged(_ sender: UISegmentedControl) {
         let title = sender.titleForSegment(at: sender.selectedSegmentIndex) ?? "Image"
         resultLabel.text = "Selected: \(title) (index \(sender.selectedSegmentIndex))"
-    }
-
-    private func createInfoLabel(_ text: String) -> UILabel {
-        let label = UILabel()
-        label.text = text
-        label.font = .preferredFont(forTextStyle: .body)
-        label.textColor = .secondaryLabel
-        label.numberOfLines = 0
-        return label
     }
 }

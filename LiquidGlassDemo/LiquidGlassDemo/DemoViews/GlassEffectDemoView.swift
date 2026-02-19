@@ -19,27 +19,13 @@ final class GlassEffectDemoView: UIView {
     }
 
     private func setupUI() {
-        let stack = UIStackView()
-        stack.axis = .vertical
-        stack.spacing = 24
-        stack.alignment = .center
-        stack.translatesAutoresizingMaskIntoConstraints = false
-        addSubview(stack)
+        let stack = addPinnedStack(spacing: 24, alignment: .center)
 
-        NSLayoutConstraint.activate([
-            stack.topAnchor.constraint(equalTo: topAnchor),
-            stack.leadingAnchor.constraint(equalTo: leadingAnchor),
-            stack.trailingAnchor.constraint(equalTo: trailingAnchor),
-            stack.bottomAnchor.constraint(equalTo: bottomAnchor),
-        ])
-
-        let infoLabel = createInfoLabel(
+        stack.addArrangedSubview(DemoUI.infoLabel(
             "Use UIVisualEffectView with UIGlassEffect to apply glass to custom views. Content is placed in the effect view's contentView."
-        )
-        stack.addArrangedSubview(infoLabel)
+        ))
 
         if #available(iOS 26.0, *) {
-            // Simple glass square
             let simpleGlass = createGlassView(size: CGSize(width: 120, height: 120), cornerRadius: 16)
             let simpleIcon = UIImageView(image: UIImage(systemName: "sparkles"))
             simpleIcon.tintColor = .label
@@ -60,7 +46,6 @@ final class GlassEffectDemoView: UIView {
             stack.addArrangedSubview(simpleGlass)
             stack.addArrangedSubview(simpleLabel)
 
-            // Glass with icon and text
             let cardGlass = createGlassView(size: CGSize(width: 280, height: 80), cornerRadius: 20)
             let cardStack = UIStackView()
             cardStack.axis = .horizontal
@@ -99,7 +84,6 @@ final class GlassEffectDemoView: UIView {
             ])
             stack.addArrangedSubview(cardGlass)
 
-            // Circular glass
             let circleGlass = createGlassView(size: CGSize(width: 80, height: 80), cornerRadius: 40)
             let circleIcon = UIImageView(image: UIImage(systemName: "person.fill"))
             circleIcon.tintColor = .label
@@ -120,7 +104,7 @@ final class GlassEffectDemoView: UIView {
             stack.addArrangedSubview(circleGlass)
             stack.addArrangedSubview(circleLabel)
         } else {
-            stack.addArrangedSubview(createInfoLabel("UIGlassEffect requires iOS 26.0+"))
+            stack.addArrangedSubview(DemoUI.infoLabel("UIGlassEffect requires iOS 26.0+"))
         }
     }
 
@@ -133,14 +117,5 @@ final class GlassEffectDemoView: UIView {
         effectView.widthAnchor.constraint(equalToConstant: size.width).isActive = true
         effectView.heightAnchor.constraint(equalToConstant: size.height).isActive = true
         return effectView
-    }
-
-    private func createInfoLabel(_ text: String) -> UILabel {
-        let label = UILabel()
-        label.text = text
-        label.font = .preferredFont(forTextStyle: .body)
-        label.textColor = .secondaryLabel
-        label.numberOfLines = 0
-        return label
     }
 }

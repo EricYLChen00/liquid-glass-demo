@@ -9,7 +9,7 @@ import UIKit
 
 final class DatePickerDemoView: UIView {
     private let resultLabel = UILabel()
-    private var datePicker: UIDatePicker!
+    private let datePicker = UIDatePicker()
     private let dateFormatter: DateFormatter = {
         let f = DateFormatter()
         f.dateStyle = .medium
@@ -28,33 +28,17 @@ final class DatePickerDemoView: UIView {
     }
 
     private func setupUI() {
-        let stack = UIStackView()
-        stack.axis = .vertical
-        stack.spacing = 20
-        stack.alignment = .fill
-        stack.translatesAutoresizingMaskIntoConstraints = false
-        addSubview(stack)
+        let stack = addPinnedStack(spacing: 20)
 
-        NSLayoutConstraint.activate([
-            stack.topAnchor.constraint(equalTo: topAnchor),
-            stack.leadingAnchor.constraint(equalTo: leadingAnchor),
-            stack.trailingAnchor.constraint(equalTo: trailingAnchor),
-            stack.bottomAnchor.constraint(equalTo: bottomAnchor),
-        ])
-
-        let infoLabel = createInfoLabel(
+        stack.addArrangedSubview(DemoUI.infoLabel(
             "UIDatePicker with glass styling on iOS 26. Switch between styles to see different presentations."
-        )
-        stack.addArrangedSubview(infoLabel)
+        ))
 
-        // Style selector
         let styleSegment = UISegmentedControl(items: ["Automatic", "Compact", "Inline", "Wheels"])
         styleSegment.selectedSegmentIndex = 0
         styleSegment.addTarget(self, action: #selector(styleChanged(_:)), for: .valueChanged)
         stack.addArrangedSubview(styleSegment)
 
-        // Date picker
-        datePicker = UIDatePicker()
         datePicker.datePickerMode = .dateAndTime
         datePicker.preferredDatePickerStyle = .automatic
         datePicker.addTarget(self, action: #selector(dateChanged(_:)), for: .valueChanged)
@@ -74,14 +58,5 @@ final class DatePickerDemoView: UIView {
 
     @objc private func dateChanged(_ sender: UIDatePicker) {
         resultLabel.text = "Selected: \(dateFormatter.string(from: sender.date))"
-    }
-
-    private func createInfoLabel(_ text: String) -> UILabel {
-        let label = UILabel()
-        label.text = text
-        label.font = .preferredFont(forTextStyle: .body)
-        label.textColor = .secondaryLabel
-        label.numberOfLines = 0
-        return label
     }
 }

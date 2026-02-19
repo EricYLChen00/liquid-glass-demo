@@ -9,6 +9,7 @@ import UIKit
 
 final class GlassContainerDemoView: UIView {
     private var glassChildren: [UIVisualEffectView] = []
+    private var childrenStack: UIStackView?
     private let statusLabel = UILabel()
 
     override init(frame: CGRect) {
@@ -22,77 +23,55 @@ final class GlassContainerDemoView: UIView {
     }
 
     private func setupUI() {
-        let stack = UIStackView()
-        stack.axis = .vertical
-        stack.spacing = 20
-        stack.alignment = .center
-        stack.translatesAutoresizingMaskIntoConstraints = false
-        addSubview(stack)
+        let stack = addPinnedStack(spacing: 20, alignment: .center)
 
-        NSLayoutConstraint.activate([
-            stack.topAnchor.constraint(equalTo: topAnchor),
-            stack.leadingAnchor.constraint(equalTo: leadingAnchor),
-            stack.trailingAnchor.constraint(equalTo: trailingAnchor),
-            stack.bottomAnchor.constraint(equalTo: bottomAnchor),
-        ])
-
-        let infoText = "UIGlassContainerEffect groups multiple glass "
+        stack.addArrangedSubview(DemoUI.infoLabel(
+            "UIGlassContainerEffect groups multiple glass "
             + "views together. This enables morphing animation "
             + "between them and improves performance by sharing "
             + "a single CABackdropLayer.\n\nTap Add/Remove to see "
             + "the morphing animation."
-        let infoLabel = createInfoLabel(infoText)
-        stack.addArrangedSubview(infoLabel)
+        ))
 
         if #available(iOS 26.0, *) {
-            // Container
             let containerEffect = UIGlassContainerEffect()
             let containerView = UIVisualEffectView(effect: containerEffect)
             containerView.translatesAutoresizingMaskIntoConstraints = false
 
-            let childrenStack = UIStackView()
-            childrenStack.axis = .horizontal
-            childrenStack.spacing = 12
-            childrenStack.alignment = .center
-            childrenStack.translatesAutoresizingMaskIntoConstraints = false
-            containerView.contentView.addSubview(childrenStack)
+            let cStack = UIStackView()
+            cStack.axis = .horizontal
+            cStack.spacing = 12
+            cStack.alignment = .center
+            cStack.translatesAutoresizingMaskIntoConstraints = false
+            containerView.contentView.addSubview(cStack)
+            self.childrenStack = cStack
 
             NSLayoutConstraint.activate([
                 containerView.heightAnchor.constraint(equalToConstant: 80),
-                childrenStack.centerXAnchor.constraint(equalTo: containerView.contentView.centerXAnchor),
-                childrenStack.centerYAnchor.constraint(equalTo: containerView.contentView.centerYAnchor),
-                childrenStack.leadingAnchor.constraint(greaterThanOrEqualTo: containerView.contentView.leadingAnchor, constant: 8),
-                childrenStack.trailingAnchor.constraint(lessThanOrEqualTo: containerView.contentView.trailingAnchor, constant: -8),
+                cStack.centerXAnchor.constraint(equalTo: containerView.contentView.centerXAnchor),
+                cStack.centerYAnchor.constraint(equalTo: containerView.contentView.centerYAnchor),
+                cStack.leadingAnchor.constraint(greaterThanOrEqualTo: containerView.contentView.leadingAnchor, constant: 8),
+                cStack.trailingAnchor.constraint(lessThanOrEqualTo: containerView.contentView.trailingAnchor, constant: -8),
             ])
 
-            // Initial children
             let icons = ["heart.fill", "star.fill", "bell.fill"]
             for iconName in icons {
                 let child = createGlassChild(systemName: iconName)
-                childrenStack.addArrangedSubview(child)
+                cStack.addArrangedSubview(child)
                 glassChildren.append(child)
             }
 
             stack.addArrangedSubview(containerView)
 
-            // Buttons
             let buttonStack = UIStackView()
             buttonStack.axis = .horizontal
             buttonStack.spacing = 12
             buttonStack.distribution = .fillEqually
-
-            let addButton = createActionButton(title: "Add", action: #selector(addChild))
-            let removeButton = createActionButton(title: "Remove", action: #selector(removeChild))
-
-            buttonStack.addArrangedSubview(addButton)
-            buttonStack.addArrangedSubview(removeButton)
+            buttonStack.addArrangedSubview(DemoUI.actionButton(title: "Add", target: self, action: #selector(addChild)))
+            buttonStack.addArrangedSubview(DemoUI.actionButton(title: "Remove", target: self, action: #selector(removeChild)))
             stack.addArrangedSubview(buttonStack)
-
-            // Tag the stack for later access
-            childrenStack.tag = 100
-            containerView.tag = 200
         } else {
-            stack.addArrangedSubview(createInfoLabel("UIGlassContainerEffect requires iOS 26.0+"))
+            stack.addArrangedSubview(DemoUI.infoLabel("UIGlassContainerEffect requires iOS 26.0+"))
         }
 
         statusLabel.text = "3 glass children"
@@ -107,7 +86,7 @@ final class GlassContainerDemoView: UIView {
 
     @available(iOS 26.0, *)
     @objc private func addChild() {
-        guard let childrenStack = viewWithTag(100) as? UIStackView else { return }
+        guard let childrenStack else { return }
         guard glassChildren.count < 8 else {
             statusLabel.text = "Max 8 children"
             return
@@ -126,7 +105,7 @@ final class GlassContainerDemoView: UIView {
     }
 
     @objc private func removeChild() {
-        guard let childrenStack = viewWithTag(100) as? UIStackView else { return }
+        guard let childrenStack else { return }
         guard let last = glassChildren.popLast() else {
             statusLabel.text = "No children to remove"
             return
@@ -166,23 +145,5 @@ final class GlassContainerDemoView: UIView {
         ])
 
         return childView
-    }
-
-    private func createActionButton(title: String, action: Selector) -> UIButton {
-        var config = UIButton.Configuration.filled()
-        config.title = title
-        config.cornerStyle = .medium
-        let button = UIButton(configuration: config)
-        button.addTarget(self, action: action, for: .touchUpInside)
-        return button
-    }
-
-    private func createInfoLabel(_ text: String) -> UILabel {
-        let label = UILabel()
-        label.text = text
-        label.font = .preferredFont(forTextStyle: .body)
-        label.textColor = .secondaryLabel
-        label.numberOfLines = 0
-        return label
     }
 }

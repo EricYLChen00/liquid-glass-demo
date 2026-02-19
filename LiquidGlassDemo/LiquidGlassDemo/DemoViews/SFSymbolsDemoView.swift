@@ -8,8 +8,6 @@
 import UIKit
 
 final class SFSymbolsDemoView: UIView {
-    private let resultLabel = UILabel()
-
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupUI()
@@ -21,26 +19,14 @@ final class SFSymbolsDemoView: UIView {
     }
 
     private func setupUI() {
-        let stack = UIStackView()
-        stack.axis = .vertical
-        stack.spacing = 20
-        stack.alignment = .center
-        stack.translatesAutoresizingMaskIntoConstraints = false
-        addSubview(stack)
+        let stack = addPinnedStack(spacing: 20, alignment: .center)
 
-        NSLayoutConstraint.activate([
-            stack.topAnchor.constraint(equalTo: topAnchor),
-            stack.leadingAnchor.constraint(equalTo: leadingAnchor),
-            stack.trailingAnchor.constraint(equalTo: trailingAnchor),
-            stack.bottomAnchor.constraint(equalTo: bottomAnchor),
-        ])
-
-        let infoText = "On iOS 26, toolbar icons should use plain "
+        stack.addArrangedSubview(DemoUI.infoLabel(
+            "On iOS 26, toolbar icons should use plain "
             + "SF Symbol variants (no circle/square fill "
             + "backgrounds) since the glass effect provides "
             + "the container."
-        let infoLabel = createInfoLabel(infoText)
-        stack.addArrangedSubview(infoLabel)
+        ))
 
         if #available(iOS 26.0, *) {
             let symbols = [
@@ -50,7 +36,6 @@ final class SFSymbolsDemoView: UIView {
                 "folder", "paperplane", "link", "lock",
             ]
 
-            // Grid: 4 columns
             let gridStack = UIStackView()
             gridStack.axis = .vertical
             gridStack.spacing = 12
@@ -73,9 +58,10 @@ final class SFSymbolsDemoView: UIView {
 
             stack.addArrangedSubview(gridStack)
         } else {
-            stack.addArrangedSubview(createInfoLabel("SF Symbols on glass requires iOS 26.0+"))
+            stack.addArrangedSubview(DemoUI.infoLabel("SF Symbols on glass requires iOS 26.0+"))
         }
 
+        let resultLabel = UILabel()
         resultLabel.text = "Plain SF Symbol variants on glass circles"
         resultLabel.font = .preferredFont(forTextStyle: .footnote)
         resultLabel.textColor = .tertiaryLabel
@@ -106,14 +92,5 @@ final class SFSymbolsDemoView: UIView {
         ])
 
         return effectView
-    }
-
-    private func createInfoLabel(_ text: String) -> UILabel {
-        let label = UILabel()
-        label.text = text
-        label.font = .preferredFont(forTextStyle: .body)
-        label.textColor = .secondaryLabel
-        label.numberOfLines = 0
-        return label
     }
 }

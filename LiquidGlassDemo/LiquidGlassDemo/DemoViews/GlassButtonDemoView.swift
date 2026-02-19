@@ -22,34 +22,20 @@ final class GlassButtonDemoView: UIView {
     }
 
     private func setupUI() {
-        let stack = UIStackView()
-        stack.axis = .vertical
-        stack.spacing = 20
-        stack.alignment = .center
-        stack.translatesAutoresizingMaskIntoConstraints = false
-        addSubview(stack)
+        let stack = addPinnedStack(spacing: 20, alignment: .center)
 
-        NSLayoutConstraint.activate([
-            stack.topAnchor.constraint(equalTo: topAnchor),
-            stack.leadingAnchor.constraint(equalTo: leadingAnchor),
-            stack.trailingAnchor.constraint(equalTo: trailingAnchor),
-            stack.bottomAnchor.constraint(equalTo: bottomAnchor),
-        ])
-
-        let infoLabel = createInfoLabel(
+        let infoLabel = DemoUI.infoLabel(
             "UIButton with .glass() configuration provides a standard glass button style. These buttons have a translucent glass background."
         )
         infoLabel.textAlignment = .natural
         stack.addArrangedSubview(infoLabel)
 
         if #available(iOS 26.0, *) {
-            // Simple glass button
             let simpleButton = UIButton(configuration: .glass())
             simpleButton.setTitle("Glass Button", for: .normal)
             simpleButton.addTarget(self, action: #selector(buttonTapped), for: .touchUpInside)
             stack.addArrangedSubview(simpleButton)
 
-            // Glass button with icon
             var iconConfig = UIButton.Configuration.glass()
             iconConfig.image = UIImage(systemName: "heart.fill")
             iconConfig.title = "Like"
@@ -58,7 +44,6 @@ final class GlassButtonDemoView: UIView {
             iconButton.addTarget(self, action: #selector(buttonTapped), for: .touchUpInside)
             stack.addArrangedSubview(iconButton)
 
-            // Glass button with subtitle
             var subtitleConfig = UIButton.Configuration.glass()
             subtitleConfig.title = "Download"
             subtitleConfig.subtitle = "4.2 MB"
@@ -68,7 +53,6 @@ final class GlassButtonDemoView: UIView {
             subtitleButton.addTarget(self, action: #selector(buttonTapped), for: .touchUpInside)
             stack.addArrangedSubview(subtitleButton)
 
-            // Large glass button
             var largeConfig = UIButton.Configuration.glass()
             largeConfig.title = "Large Glass Button"
             largeConfig.buttonSize = .large
@@ -76,7 +60,6 @@ final class GlassButtonDemoView: UIView {
             largeButton.addTarget(self, action: #selector(buttonTapped), for: .touchUpInside)
             stack.addArrangedSubview(largeButton)
 
-            // Small glass button
             var smallConfig = UIButton.Configuration.glass()
             smallConfig.title = "Small"
             smallConfig.buttonSize = .small
@@ -84,7 +67,7 @@ final class GlassButtonDemoView: UIView {
             smallButton.addTarget(self, action: #selector(buttonTapped), for: .touchUpInside)
             stack.addArrangedSubview(smallButton)
         } else {
-            stack.addArrangedSubview(createInfoLabel("Glass buttons require iOS 26.0+"))
+            stack.addArrangedSubview(DemoUI.infoLabel("Glass buttons require iOS 26.0+"))
         }
 
         resultLabel.text = "Tap any button"
@@ -97,14 +80,5 @@ final class GlassButtonDemoView: UIView {
     @objc private func buttonTapped() {
         tapCount += 1
         resultLabel.text = "Button tapped \(tapCount) time\(tapCount == 1 ? "" : "s")"
-    }
-
-    private func createInfoLabel(_ text: String) -> UILabel {
-        let label = UILabel()
-        label.text = text
-        label.font = .preferredFont(forTextStyle: .body)
-        label.textColor = .secondaryLabel
-        label.numberOfLines = 0
-        return label
     }
 }

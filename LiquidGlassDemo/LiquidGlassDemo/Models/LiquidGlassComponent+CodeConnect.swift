@@ -188,10 +188,13 @@ extension LiquidGlassComponent {
         .glassEffectTinted: CodeConnectInfo(
             uikitCode: """
             let glassEffect = UIGlassEffect()
-            glassEffect.tintColor = .systemBlue
             let effectView = UIVisualEffectView(
                 effect: glassEffect
             )
+            let tintView = UIView()
+            tintView.backgroundColor = .systemBlue
+                .withAlphaComponent(0.3)
+            effectView.contentView.insertSubview(tintView, at: 0)
             """,
             swiftuiCode: """
             Text("Tinted Glass")

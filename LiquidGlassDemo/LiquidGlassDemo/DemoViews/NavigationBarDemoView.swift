@@ -22,35 +22,19 @@ final class NavigationBarDemoView: UIView {
     }
 
     private func setupUI() {
-        let stack = UIStackView()
-        stack.axis = .vertical
-        stack.spacing = 16
-        stack.translatesAutoresizingMaskIntoConstraints = false
-        addSubview(stack)
+        let stack = addPinnedStack()
 
-        NSLayoutConstraint.activate([
-            stack.topAnchor.constraint(equalTo: topAnchor),
-            stack.leadingAnchor.constraint(equalTo: leadingAnchor),
-            stack.trailingAnchor.constraint(equalTo: trailingAnchor),
-            stack.bottomAnchor.constraint(equalTo: bottomAnchor),
-        ])
-
-        let infoText = "The navigation bar automatically adopts "
+        stack.addArrangedSubview(DemoUI.infoLabel(
+            "The navigation bar automatically adopts "
             + "Liquid Glass when compiled with Xcode 26 SDK. "
             + "No code changes needed.\n\nTap buttons below to "
             + "configure different bar button item styles."
-        let infoLabel = createInfoLabel(infoText)
-        stack.addArrangedSubview(infoLabel)
+        ))
 
-        let defaultButton = createActionButton(title: "Default Style", action: #selector(applyDefaultStyle))
-        let prominentButton = createActionButton(title: "Prominent Bar Items", action: #selector(applyProminentStyle))
-        let fixedSpaceButton = createActionButton(title: "Fixed Space Layout", action: #selector(applyFixedSpaceStyle))
-        let resetButton = createActionButton(title: "Reset", action: #selector(resetStyle))
-
-        stack.addArrangedSubview(defaultButton)
-        stack.addArrangedSubview(prominentButton)
-        stack.addArrangedSubview(fixedSpaceButton)
-        stack.addArrangedSubview(resetButton)
+        stack.addArrangedSubview(DemoUI.actionButton(title: "Default Style", target: self, action: #selector(applyDefaultStyle)))
+        stack.addArrangedSubview(DemoUI.actionButton(title: "Prominent Bar Items", target: self, action: #selector(applyProminentStyle)))
+        stack.addArrangedSubview(DemoUI.actionButton(title: "Fixed Space Layout", target: self, action: #selector(applyFixedSpaceStyle)))
+        stack.addArrangedSubview(DemoUI.actionButton(title: "Reset", target: self, action: #selector(resetStyle)))
     }
 
     @objc private func applyDefaultStyle() {
@@ -75,23 +59,5 @@ final class NavigationBarDemoView: UIView {
 
     @objc private func resetStyle() {
         parentVC?.navigationItem.rightBarButtonItems = nil
-    }
-
-    private func createActionButton(title: String, action: Selector) -> UIButton {
-        var config = UIButton.Configuration.filled()
-        config.title = title
-        config.cornerStyle = .medium
-        let button = UIButton(configuration: config)
-        button.addTarget(self, action: action, for: .touchUpInside)
-        return button
-    }
-
-    private func createInfoLabel(_ text: String) -> UILabel {
-        let label = UILabel()
-        label.text = text
-        label.font = .preferredFont(forTextStyle: .body)
-        label.textColor = .secondaryLabel
-        label.numberOfLines = 0
-        return label
     }
 }

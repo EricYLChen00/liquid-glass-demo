@@ -8,9 +8,9 @@
 import UIKit
 
 @available(iOS 26.0, *)
-class GlassCardView: UIView {
+final class GlassCardView: UIView {
     private let effectView: UIVisualEffectView
-    let contentContainerView = UIView()
+    private(set) var contentContainerView = UIView()
 
     init(cornerRadius: CGFloat = 16) {
         let effect = UIGlassEffect()
