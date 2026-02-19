@@ -7,11 +7,6 @@
 
 import UIKit
 
-struct CodeConnectInfo {
-    let uikitCode: String
-    let swiftuiCode: String
-}
-
 final class CodeConnectReferenceView: UIView {
     private let info: CodeConnectInfo
 
@@ -30,6 +25,7 @@ final class CodeConnectReferenceView: UIView {
         let card = UIView()
         card.backgroundColor = .secondarySystemGroupedBackground
         card.layer.cornerRadius = 12
+        card.clipsToBounds = true
         card.translatesAutoresizingMaskIntoConstraints = false
         addSubview(card)
 
@@ -131,9 +127,7 @@ final class CodeConnectReferenceView: UIView {
     private func makeSeparator() -> UIView {
         let sep = UIView()
         sep.backgroundColor = .separator
-        sep.heightAnchor.constraint(
-            equalToConstant: 1.0 / UIScreen.main.scale
-        ).isActive = true
+        sep.heightAnchor.constraint(equalToConstant: 0.5).isActive = true
         return sep
     }
 }

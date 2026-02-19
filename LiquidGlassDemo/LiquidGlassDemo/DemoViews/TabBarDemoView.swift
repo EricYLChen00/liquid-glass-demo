@@ -8,8 +8,8 @@
 import UIKit
 
 final class TabBarDemoView: UIView {
-    init(parentVC: UIViewController) {
-        super.init(frame: .zero)
+    override init(frame: CGRect) {
+        super.init(frame: frame)
         setupUI()
     }
 

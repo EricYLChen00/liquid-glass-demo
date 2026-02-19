@@ -81,7 +81,7 @@ final class ComponentDetailViewController: UIViewController {
         case .navigationBar:
             return NavigationBarDemoView(parentVC: self)
         case .tabBar:
-            return TabBarDemoView(parentVC: self)
+            return TabBarDemoView()
         case .toolbar:
             return ToolbarDemoView(parentVC: self)
         case .searchBar:
